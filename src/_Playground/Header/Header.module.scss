@@ -1,0 +1,25 @@
+.header {
+  .ButtonUser {
+    background: transparent;
+    cursor: pointer;
+    margin: 0;
+    text-align: inherit;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 21px !important;
+    transition: box-shadow 0.2s ease;
+    padding: 5px 5px 5px 12px;
+    user-select: auto;
+    outline: none;
+    align-items: center;
+    color: #222222;
+    display: inline-flex;
+    height: 42px;
+
+    vertical-align: middle;
+    z-index: 60;
+  }
+  a {
+    color: #222222 !important;
+  }
+}

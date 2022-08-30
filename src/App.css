@@ -1,38 +1,77 @@
-.App {
-  text-align: center;
+/* h1 {
+  color: #ff385c !important;
+} */
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.trigger {
+  color: #ff385c !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.site-layout .site-layout-background {
+  background: #fff;
+}
+.logo {
+  height: 32px;
+  margin: 16px;
+}
+.logo svg {
+  color: #ff385c !important;
+}
+th.ant-table-cell {
+  background-color: #ff385c !important;
+  color: white !important;
+}
+button.ant-input-search-button {
+  background: #ff385c;
+  border-radius: 5%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ant-pagination-item-active {
+  border-color: #ff385c !important;
 }
-
-.App-link {
-  color: #61dafb;
+.ant-pagination-item:hover {
+  border-color: #ff385c !important;
+  color: #ff385c !important;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ant-pagination-item-active a {
+  color: #ff385c !important;
+}
+.ant-pagination-item:hover a {
+  color: #ff385c !important;
+}
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+  color: #ff385c !important;
+  border-color: #ff385c !important;
+}
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: #ff385c !important;
+}
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #ff385c !important;
+}
+.ant-menu-submenu-selected {
+  color: #ff385c !important;
+}
+.menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
+  color: #ff385c !important;
+}
+.ant-menu-light .ant-menu-item:hover,
+.ant-menu-light .ant-menu-item-active,
+.ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-light .ant-menu-submenu-active,
+.ant-menu-light .ant-menu-submenu-title:hover {
+  color: #ff385c !important;
+}
+.ant-menu-item-selected {
+  color: #ff385c !important;
+}
+.ant-select-selector {
+  border-radius: 25px !important;
 }
