@@ -407,6 +407,24 @@ const LocationList = () => {
     SetEditFormImageValue(undefined);
   };
   /*end Sửa ảnh*/
+  if (isloading) {
+    return (
+      <div className="loading h-screen">
+        <svg viewBox="0 0 50 50">
+          <circle className="ring" cx={25} cy={25} r={20} />
+          <circle className="ball" cx={25} cy={5} r="3.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (error) {
+    <div className="loading h-screen">
+      <svg viewBox="0 0 50 50">
+        <circle className="ring" cx={25} cy={25} r={20} />
+        <circle className="ball" cx={25} cy={5} r="3.5" />
+      </svg>
+    </div>;
+  }
   return (
     <div>
       <h1 className="text-center font-bold text-lg">Quản lý vị trí</h1>

@@ -75,3 +75,30 @@ button.ant-input-search-button {
 .ant-select-selector {
   border-radius: 25px !important;
 }
+.loading {
+  position: relative;
+}
+.loading svg {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  width: 3.75em;
+  animation: 1.5s spin ease infinite;
+}
+
+.ring {
+  fill: none;
+  stroke: hsla(341, 97%, 59%, 0.3);
+  stroke-width: 2;
+}
+
+.ball {
+  fill: #fc2f70;
+  stroke: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

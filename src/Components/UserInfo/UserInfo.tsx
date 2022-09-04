@@ -3,12 +3,15 @@ import { AppDispatch, RootState } from "configStore";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { editImageUser, getUserDetail } from "Slices/User";
+import { editImageUser, getUserDetail, updateUser } from "Slices/User";
 import { Avatar } from "antd";
 import Swal from "sweetalert2";
 import { User } from "Interface/user";
 import type { UploadProps } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useForm } from "react-hook-form";
+import classNames from "classnames";
+import moment from "moment";
 const UserInfo = () => {
   const { UserId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +19,46 @@ const UserInfo = () => {
     dispatch(getUserDetail(UserId!));
   }, []);
   const { userDetail } = useSelector((state: RootState) => state.user);
+  const [showInputName, setShowInputName] = useState<boolean>(false);
+  const [showInputGender, setShowInputGender] = useState<boolean>(false);
+  const [showInputBirthDay, setShowInputBirthDay] = useState<boolean>(false);
+  const [showInputEmail, setShowInputEmail] = useState<boolean>(false);
+  const [showInputPhone, setShowInputPhone] = useState<boolean>(false);
+  const [showInputAddress, setShowInputAddress] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }, //liệt kê các input đang lỗi
+  } = useForm<User>({
+    //defaultValues khai báo giá trị mặc định cho các input trong form
+    defaultValues: {
+      name: userDetail?.name,
+      gender: userDetail?.gender,
+      birthday: userDetail?.birthday,
+      email: userDetail?.email,
+      phone: userDetail?.phone,
+      address: userDetail?.address,
+      _id: UserId,
+    },
+    //mode: cacash validation đc trigger (defaute là submit)
+    mode: "onSubmit",
+  });
+  const onSubmit = async (values: User) => {
+    await dispatch(updateUser(values))
+      .unwrap()
+      .then((result) => {
+        if (result._id) {
+          Swal.fire({
+            title: "Cập nhật thành công",
+          });
+        } else {
+          Swal.fire({
+            title: "Cập nhật thất bại",
+          });
+        }
+      });
+    dispatch(getUserDetail(UserId!));
+  };
   /* form sửa ảnh */
   const props: UploadProps = {
     beforeUpload: (file) => {
@@ -43,8 +86,8 @@ const UserInfo = () => {
     return (
       <Modal
         visible={visibleImage}
-        title="Form sửa ảnh"
-        okText="Sửa ảnh"
+        title="Cập nhật ảnh cá nhân"
+        okText="Cập nhật"
         cancelText="Hủy"
         onCancel={onCancel}
         onOk={() => {
@@ -106,7 +149,7 @@ const UserInfo = () => {
   return (
     <div>
       <Row className="m-10">
-        <Col lg={8} xs={24} className="border-2 rounded-3xl p-5 text-xl mb-2">
+        <Col lg={8} xs={24} className="border-2 rounded-3xl p-5 text-xl mb-2 ">
           <div className="w-32  m-auto text-center">
             <Avatar src={userDetail?.avatar} size={124} />
             <button className="underline" onClick={() => setVisibleImage(true)}>
@@ -160,19 +203,237 @@ const UserInfo = () => {
             <span className="ml-1 text-xs">Địa chỉ email</span>
           </div>
         </Col>
-        <Col lg={16} xs={24} className="pl-5 text-xl">
-          <h1 className="text-3xl"> Tài Khoản {userDetail?.name}</h1>
-          <div className="text-gray-500 underline  ">
-            Địa chỉ: {userDetail?.address}
-          </div>
-          <div className="text-gray-500 underline ">
-            Email: {userDetail?.email}
-          </div>
-          <div className="text-gray-500 underline ">
-            Giới tính: {userDetail?.gender ? "nam" : "nữ"}
-          </div>
-          <div className="text-gray-500 underline ">
-            Số điện thoại: {userDetail?.phone}
+        <Col lg={16} xs={24} className=" text-xl">
+          <div className="lg:px-10 ">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Tên pháp lý</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {userDetail?.name}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputName(!showInputName)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputName ? "block" : "hidden",
+                  )}
+                >
+                  <input
+                    {...register("name")}
+                    type="text"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder={userDetail?.name}
+                  />
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputName(!showInputName)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Giới tính</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {userDetail?.gender ? "Nam" : "Nữ"}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputGender(!showInputGender)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputGender ? "block" : "hidden",
+                  )}
+                >
+                  <select
+                    {...register("gender")}
+                    id="countries"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  >
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
+                  </select>
+
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputGender(!showInputGender)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Ngày sinh</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {moment(userDetail?.birthday)
+                        .format("DD-MM-YYYY")
+                        .toString()}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputBirthDay(!showInputBirthDay)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputBirthDay ? "block" : "hidden",
+                  )}
+                >
+                  <input
+                    {...register("birthday")}
+                    type="date"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  />
+
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputBirthDay(!showInputBirthDay)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Địa chỉ email</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {userDetail?.email}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputEmail(!showInputEmail)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputEmail ? "block" : "hidden",
+                  )}
+                >
+                  <input
+                    {...register("email")}
+                    type="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder={userDetail?.email}
+                  />
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputEmail(!showInputEmail)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Số điện thoại</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {userDetail?.phone}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputPhone(!showInputPhone)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputPhone ? "block" : "hidden",
+                  )}
+                >
+                  <input
+                    {...register("phone")}
+                    type="text"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder={userDetail?.phone}
+                  />
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputPhone(!showInputPhone)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+              <div className=" border-b py-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-base tracking-wide">Địa chỉ</div>
+                    <div className="text-sm tracking-wide text-gray-500">
+                      {userDetail?.address}
+                    </div>
+                  </div>
+                  <div>
+                    <a
+                      className="underline font-medium text-sm tracking-wide text-gray-700 hover:text-black duration-150 cursor-pointer"
+                      onClick={() => setShowInputAddress(!showInputAddress)}
+                    >
+                      Thay đổi
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className={classNames(
+                    "mt-2",
+                    showInputAddress ? "block" : "hidden",
+                  )}
+                >
+                  <input
+                    {...register("address")}
+                    type="text"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder={userDetail?.address}
+                  />
+                  <button
+                    className="px-3 py-2 mt-2 bg-gray-600 text-white hover:bg-black duration-200 rounded-lg"
+                    onClick={() => setShowInputAddress(!showInputAddress)}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </Col>
       </Row>

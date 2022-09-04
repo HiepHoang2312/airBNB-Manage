@@ -48,12 +48,13 @@ const UserList = () => {
         _id: editFormValue?._id,
       });
     }
+
     return (
       <Modal
         visible={visible}
         title="Sửa Thông Tin Người Dùng"
-        okText="Create"
-        cancelText="Cancel"
+        okText="Sửa"
+        cancelText="Hủy"
         onCancel={onCancel}
         onOk={() => {
           form
@@ -342,7 +343,24 @@ const UserList = () => {
     SetEditFormValue(undefined);
   };
   /*end Sửa */
-
+  if (isloading) {
+    return (
+      <div className="loading h-screen">
+        <svg viewBox="0 0 50 50">
+          <circle className="ring" cx={25} cy={25} r={20} />
+          <circle className="ball" cx={25} cy={5} r="3.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (error) {
+    <div className="loading h-screen">
+      <svg viewBox="0 0 50 50">
+        <circle className="ring" cx={25} cy={25} r={20} />
+        <circle className="ball" cx={25} cy={5} r="3.5" />
+      </svg>
+    </div>;
+  }
   return (
     <div>
       <h1 className="text-center font-bold text-lg">
