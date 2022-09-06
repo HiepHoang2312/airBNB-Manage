@@ -39,6 +39,7 @@ const UserInfo = () => {
       phone: userDetail?.phone,
       address: userDetail?.address,
       _id: UserId,
+      type: userDetail?.type,
     },
     //mode: cacash validation đc trigger (defaute là submit)
     mode: "onSubmit",

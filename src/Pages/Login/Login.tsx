@@ -37,9 +37,10 @@ const Login = () => {
           });
         }
       });
+
     const user: UserValues = JSON.parse(localStorage.getItem("user") as string);
 
-    if (user && user.type === "ADMIN") {
+    if (user && user?.type === "ADMIN") {
       {
         navigate("/Admin", { replace: true });
       }
